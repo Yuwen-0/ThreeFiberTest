@@ -11,9 +11,7 @@ function App() {
   return (
     <>
       <Canvas id='threeCanvas'>
-
-        <Html>  
-          <h1>Three.js</h1>
+        <Html>
         </Html>
         <Suspense fallback={null}>
           <Three />
