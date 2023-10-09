@@ -2,7 +2,7 @@
 /* eslint-disable react/no-unknown-property */
 // eslint-disable-next-line no-unused-vars
 import React, { useRef } from "react";
-import { OrbitControls, PerspectiveCamera, useHelper } from "@react-three/drei";
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { CubeTextureLoader } from "three/src/loaders/CubeTextureLoader";
 import { useThree, useLoader, useFrame } from "@react-three/fiber";
 import { useEffect } from "react";
@@ -110,9 +110,9 @@ const SunAnimation = () => {
     
     return (
         <>
-            <PerspectiveCamera makeDefault position={[0, 50, 100]} />
+            <PerspectiveCamera makeDefault position={[0, 550, 0]} />
             <OrbitControls />
-            <gridHelper position={[0, -1, 0]} args={[10000, 200]} />
+
 
             {/* SUN */}
             <mesh ref={sunRef} position={[0, 0, 0]}>
@@ -144,7 +144,7 @@ const SunAnimation = () => {
                         attach="material" 
                         map={SaturnRingTexture} 
                         transparent
-                        opacity={0.7} 
+                        opacity={0.3} 
                     />
                 </mesh>
             </Planet>
@@ -167,23 +167,35 @@ const SunAnimation = () => {
             <Planet ParentRef={NeptuneParent} PlanetRef={NeptuneRef} PlanetTexture={NeptuneTexture} Mass={12} Distance={270} />
 
             {/* LIGHTS */}
-            <pointLight ref={sunLight} distance={10000} args={["white", 4000, 1000]} />
+            <pointLight  ref={sunLight} distance={10000} args={["white", 10000, 1000]} />
             
         </>
     );
 }
 
-function Planet({ParentRef, PlanetRef, PlanetTexture , Mass ,Distance , children}) {
-    return (<mesh ref={ParentRef}>
-              <sphereGeometry attach="geometry" args={[15, 30, 30]} />
-              <mesh ref={PlanetRef} position={[Distance, 0, 0]}>
-                  <sphereGeometry attach="geometry" args={[Mass, 30, 30]} />
-                  <meshPhysicalMaterial attach="material" map={PlanetTexture} emissive="gray" emissiveIntensity={0.03} />
-                  <ambientLight distance={10} intensity={0.03} />
-              {children}
-              </mesh>
-          </mesh>);
-  }
+function Planet({ ParentRef, PlanetRef, PlanetTexture, Mass, Distance, children }) {
+    return (
+        <mesh ref={ParentRef}>
+            <sphereGeometry attach="geometry" args={[15, 30, 30]} />
+            <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+                <ringGeometry rotateX={-Math.PI / 2} attach="geometry"  args={[Distance, Distance +0.25, 10000]} />
+                <meshBasicMaterial
+                    side={THREE.DoubleSide}
+                    attach="material"
+                    transparent
+                    opacity={0.5} // Adjust the opacity as needed
+                />
+            </mesh>
+            <mesh ref={PlanetRef} position={[Distance, 0, 0]}>
+                <sphereGeometry attach="geometry" args={[Mass, 30, 30]} />
+                <meshPhysicalMaterial attach="material" map={PlanetTexture} emissive="gray" emissiveIntensity={0.03} />
+                {children}
+            </mesh>
+            <ambientLight color="white" intensity={0.002} />
+        </mesh>
+    );
+}
+
 
   
 
