@@ -2,6 +2,12 @@ body{
   background: #f1f1f1;
 }
 
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 #threeCanvas{
   height: 100vh !important;
 }
